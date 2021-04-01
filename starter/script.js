@@ -94,7 +94,7 @@ const displayMovements = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
-        <div class="movements__value">${mov}€</div>
+        <div class="movements__value">${mov.toFixed(2)}€</div>
       </div>
     `;
 
@@ -104,19 +104,19 @@ const displayMovements = function (movements, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance}€`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes}€`;
+  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out)}€`;
+  labelSumOut.textContent = `${Math.abs(out.toFixed(2))}€`; //tofixed(2 ) fix the unnessesary numbers after the decimal point
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -126,7 +126,7 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest}€`;
+  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
 };
 
 const createUsernames = function (accs) {
@@ -164,7 +164,7 @@ btnLogin.addEventListener('click', function (e) {
   );
   console.log(currentAccount);
 
-  if (currentAccount?.pin === Number(inputLoginPin.value)) {
+  if (currentAccount?.pin === +inputLoginPin.value) {
     // Display UI and message
     labelWelcome.textContent = `Welcome back, ${
       currentAccount.owner.split(' ')[0]
@@ -182,7 +182,7 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAcc = accounts.find(
     acc => acc.username === inputTransferTo.value
   );
@@ -206,7 +206,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.floor(inputLoanAmount.value); //this rounds the floor to the the lowest intger
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     // Add movement
@@ -251,3 +251,95 @@ btnSort.addEventListener('click', function (e) {
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
+
+//NUMBNERS
+/*And the first thing that you should know about numbers is that in JavaScript,
+all numbers are presented internally as floating point numbers.So basically, always as decimals,
+no matter if we actually write them as integers or as decimals.*/
+
+console.log(23 === 23.0); //true       //and so you see that 23 is, in fact, the same as 23.0. Okay? And that's the reason why we only have one data type for all numbers.
+
+/**Also, numbers are represented internally in a 64 base 2 format. So that means that numbers are always stored in a binary format.*/
+
+//base  10 -  0 to 9// 1/10 is simply 0.1.And so that's very easy to represent.But, for example, if we were trying to do 3/10, gives us  0.33333333...
+//then that is also impossible to represent for us
+
+//Binary base 2 - 0 1
+console.log(0.1 + 0.2); //0.30000000000000004
+console.log(0.1 + 0.2 === 0.3); //false        incorrect as we know. This should be true but well, this is simply an error
+
+/////CONVERSION
+//change string to number
+console.log(Number('23')); //23  number
+//esiest way to change string to number
+console.log(+'23'); //23  number
+
+//Parsing     note: parseInt    represent intger        pasreFloat represent float number
+console.log(Number.parseInt('30px', 10)); //this will read the number 30 and it was not string now  and even we can add the number  base 10 that prevent some bugs
+console.log(Number.parseInt('30px', 2)); //this will not work becouse we make it the base of 2     outputs NaN
+//note the above code to work it should start with number
+console.log(Number.parseInt('e30px', 10)); //NaN    this sould be start with numbers not  letter
+
+console.log(Number.parseFloat('2.5rem', 10)); //2.5
+console.log(Number.parseInt('2.5rem', 10)); //2  only read 2
+//console.log(parseFloat('2.5rem', 10)); //2.5  but old way
+
+//isNaN  checking if value is NaN
+console.log(Number.isNaN(20)); //false
+console.log(Number.isNaN('20')); //false
+console.log(Number.isNaN(+'20x')); //NAN  true
+console.log(Number.isNaN(20 / 0)); //false    it is infinity
+
+//isFinite   checking if value is number  or nut
+console.log(Number.isFinite(20)); //true
+console.log(Number.isFinite('20')); //false
+console.log(Number.isFinite('20X')); //false
+console.log(Number.isFinite(20 / 0)); //false
+
+//////Math and Rounding
+console.log(Math.sqrt(25)); //5 //sqareroot
+console.log(25 ** (1 / 2)); //5  same with above code
+console.log(8 ** (1 / 3)); // 2    only to calculate cubic root
+
+//max and min
+console.log(Math.max(5, 18, 23, 11, 2)); //23
+console.log(Math.max(5, 18, '23', 11, 2)); //23
+console.log(Math.max(5, 18, '23px', 11, 2)); //NaN
+
+console.log(Math.min(5, 18, 23, 11, 2)); //11
+
+//constants
+console.log(Math.PI); //3.141592653589793
+console.log(Math.PI * Number.parseFloat('10px') ** 2); //314.1592653589793  area of a cicle with radius 10
+
+//formla of rundom numbers
+
+//console.log(Math.trunc(Math.random() * 6) + 1); //numbers between 1--6
+
+//lets make nice formula
+const randomInt = (max, min) =>
+  Math.floor(Math.random() * (max - min) + 1) + min; //0...1-> 0...(max-min)->min...max  we change trunc with floor  becouse floor work in all situations
+//console.log(randomInt(10, 20));
+
+//Rounding Intgers
+
+console.log(Math.round(23.3)); //23
+console.log(Math.round(23.9)); //24  //they round to the nearest intger
+
+console.log(Math.ceil(23.3)); //24
+console.log(Math.ceil(23.9)); //24
+
+console.log(Math.floor(23.3)); //23
+console.log(Math.floor('23.9')); //23
+
+console.log(Math.trunc(23.3)); //23
+console.log(Math.trunc(23.9)); //23
+
+console.log(Math.trunc(-23.3)); //-23
+console.log(Math.floor(-23.3)); //-24  it rounded to the above becouse its negative
+
+///ROUNDING DECIMALS
+console.log((2.7).toFixed(0)); //3
+console.log((2.7).toFixed(3)); //2.700
+console.log((2.345).toFixed(2)); //2.35
+console.log(+(2.345).toFixed(2)); //2.35 //this changed to number
