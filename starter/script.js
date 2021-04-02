@@ -408,3 +408,40 @@ console.log(12n / 3n); //4n
 console.log(13n / 3n); //4n
 
 console.log(10 / 3); //3.3333333333333335
+
+///////////////////////////////////////
+// Creating Dates
+
+const now = new Date(); //gives us current time
+console.log(now);
+
+console.log(new Date('Aug 02 2020 18:05:41')); //Sun Aug 02 2020 18:05:41 GMT-0700 (Pacific Daylight Time)
+console.log(new Date('December 24, 2015')); //Thu Dec 24 2015 00:00:00 GMT-0800 (Pacific Standard Time)
+console.log(new Date(account1.movementsDates[0])); //Date Mon Nov 18 2019 13:31:17 GMT-0800 (Pacific Standard Time)
+
+console.log(new Date(2037, 10, 19, 15, 23, 5)); //Date Thu Nov 19 2037 15:23:05 GMT-0800 (Pacific Standard Time)
+
+console.log(new Date(2037, 10, 31)); //Date Tue Dec 01 2037 00:00:00 GMT-0800 (Pacific Standard Time)
+
+console.log(new Date(0)); //Date Wed Dec 31 1969 16:00:00 GMT-0800 (Pacific Standard Time)   the day the time is set
+console.log(new Date(3 * 24 * 60 * 60 * 1000)); //Date Sat Jan 03 1970 16:00:00 GMT-0800 (Pacific Standard Time)    the  4th day after the time was set
+
+// Working with dates
+const future = new Date(2037, 10, 19, 15, 23); //Date Thu Nov 19 2037 15:23:00 GMT-0800 (Pacific Standard Time)
+console.log(future);
+console.log(future.getFullYear()); //2037
+console.log(future.getMonth()); //10
+console.log(future.getDate()); //19
+console.log(future.getDay()); //4
+console.log(future.getHours()); //15
+console.log(future.getMinutes()); //23
+console.log(future.getSeconds()); //0      secounds
+console.log(future.toISOString()); // 2037-11-19T23:23:00.000Z      The International Organization for Standardization (ISO) date format is a standard way to express a numeric calendar date that eliminates ambiguity.
+console.log(future.getTime()); //2142285780000      total time since 1970 to  the future  Thu Nov 19 2037 15:23:00 GMT-0800
+
+console.log(new Date(2142256980000)); //Date Thu Nov 19 2037 07:23:00 GMT-0800 (Pacific Standard Time)    this gives as the exact time of the future
+
+console.log(Date.now()); //1617375170358
+
+future.setFullYear(2040); //Date Mon Nov 19 2040 15:23:00 GMT-0800 (Pacific Standard Time)    we set the date  of the future to new year
+console.log(future);
