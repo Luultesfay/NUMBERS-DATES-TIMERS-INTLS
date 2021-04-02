@@ -343,3 +343,29 @@ console.log((2.7).toFixed(0)); //3
 console.log((2.7).toFixed(3)); //2.700
 console.log((2.345).toFixed(2)); //2.35
 console.log(+(2.345).toFixed(2)); //2.35 //this changed to number
+
+// The Remainder Operator
+console.log(5 % 2);
+console.log(5 / 2); // 5 = 2 * 2 + 1
+
+console.log(8 % 3);
+console.log(8 / 3); // 8 = 2 * 3 + 2
+
+console.log(6 % 2);
+console.log(6 / 2);
+
+console.log(7 % 2);
+console.log(7 / 2);
+//check if the number is even or not
+const isEven = n => n % 2 === 0;
+console.log(isEven(8));
+console.log(isEven(23));
+console.log(isEven(514));
+
+//lets select all movement from banklist and attach to event handler  and make every 2nd row of the movement becomes 'orengered'
+labelBalance.addEventListener('click', function () {
+  [...document.querySelectorAll('.movements__row')].forEach(function (row, i) {
+    if (i % 2 === 0) row.style.backgroundColor = 'coral'; //every 2nd row coral like even number
+    if (i % 3 === 0) row.style.backgroundColor = 'lightblue'; //every 3rd row
+  });
+});
