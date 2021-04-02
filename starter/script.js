@@ -369,3 +369,42 @@ labelBalance.addEventListener('click', function () {
     if (i % 3 === 0) row.style.backgroundColor = 'lightblue'; //every 3rd row
   });
 });
+
+//BIGINTIGER
+
+///////////////////////////////////////
+// Working with BigInt
+console.log(2 ** 53 - 1); //9007199254740991
+console.log(Number.MAX_SAFE_INTEGER); //9007199254740991  javascript only can hold this amount of number  but above this it dosen't represent  it accurately before ES2020
+console.log(2 ** 53 + 1);
+console.log(2 ** 53 + 2);
+console.log(2 ** 53 + 3);
+console.log(2 ** 53 + 4);
+
+console.log(4838430248342043823408394839483204n); //4838430248342043823408394839483204n   the n represents the bigInt
+console.log(BigInt(48384302)); //the same as the above code   both represent big int
+
+// Operations
+console.log(10000n + 10000n); //20000n
+console.log(36286372637263726376237263726372632n * 10000000n); //362863726372637263762372637263726320000000n
+//console.log(Math.sqrt(16n)); //theise kind of methods is not working     can't convert BigInt to number
+
+const huge = 20289830237283728378237n;
+const num = 23;
+//console.log(huge * num); //not working  multiplication of bigInt and regular number is imposible  to make it work we need to change the regular number to big int
+console.log(huge * BigInt(num)); //466666095457525752699451n   now we fix the above code  we  change the regular number to big int and aded it
+
+// Exceptions
+console.log(20n > 15); //but this worked   bigInt> regular number  sets to true
+console.log(20n === 20); //false    becouse  its strict equality  and in strict equality there is no type conversion
+console.log(typeof 20n); //bigint
+console.log(20n == '20'); //true  becouse this is loose and  there is type conversion
+
+console.log(huge + ' is REALLY big!!!'); //20289830237283728378237 is REALLY big!!!     this changes the huge number to string
+
+// Divisions
+console.log(11n / 3n); //3n
+console.log(12n / 3n); //4n
+console.log(13n / 3n); //4n
+
+console.log(10 / 3); //3.3333333333333335
