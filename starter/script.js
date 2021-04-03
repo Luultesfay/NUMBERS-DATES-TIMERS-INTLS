@@ -477,3 +477,18 @@ console.log(Date.now()); //1617375170358
 
 future.setFullYear(2040); //Date Mon Nov 19 2040 15:23:00 GMT-0800 (Pacific Standard Time)    we set the date  of the future to new year
 console.log(future);
+
+///////OPERATION with DATES
+
+//we can calculate  dates between two  differnt dates   lets  see the example below  that  a function that return the difference between two diffrent dates
+
+const calcDaydifference = (day1, day2) =>
+  Math.abs(day2 - day1) / (1000 * 60 * 60 * 24);
+
+const daysDiffernce = calcDaydifference(
+  new Date(2021, 2, 10),
+  new Date(2021, 2, 14)
+);
+console.log(daysDiffernce); //the difference is 4 days
+//console.log(daysDiffernce); //1378800000
+//note: we can use the   above code  to modifay our bank list movement dates to  1 day  2day   ...see its implementation in 'final' folder
