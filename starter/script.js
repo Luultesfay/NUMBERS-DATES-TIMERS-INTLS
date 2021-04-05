@@ -81,6 +81,15 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+//formatter the currency using this  usable function
+
+const forrmatedCur = function (value, locale, currency) {
+  return new Intl.NumberFormat(locale, {
+    style: 'currency',
+    currency: currency,
+  }).format(value);
+};
+
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
@@ -100,15 +109,19 @@ const displayMovements = function (acc, sort = false) {
 
     const displayDate = `${month}/ ${day} /${year} `; //04/ 02 /2021 ,20:30
 
+    //we are formatting the currency according to the  account country
+    const formattedMov = forrmatedCur(mov, acc.locale, acc.currency); //we pass the value to the function  forrmatedCur
+
     const html = `
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       i + 1
     } ${type}</div>
     <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
+        
       </div>
-    `;
+    `; //<div class="movements__value">${mov.toFixed(2)}€</div>
 
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
@@ -116,7 +129,12 @@ const displayMovements = function (acc, sort = false) {
 
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.textContent = `${acc.balance.toFixed(2)}€`;
+
+  labelBalance.textContent = forrmatedCur(
+    acc.balance,
+    acc.locale,
+    acc.currency
+  ); //`${acc.balance.toFixed(2)}€`;   this is old code we replace by the forrmatedCur function
 };
 
 const calcDisplaySummary = function (acc) {
@@ -492,3 +510,35 @@ const daysDiffernce = calcDaydifference(
 console.log(daysDiffernce); //the difference is 4 days
 //console.log(daysDiffernce); //1378800000
 //note: we can use the   above code  to modifay our bank list movement dates to  1 day  2day   ...see its implementation in 'final' folder
+
+/////////// check the internationalization video and implimentation in final folder
+
+//////////INTERNATIONALIZING NUMBERS
+
+///we formatted dates using the Internationalization API.
+
+//Eg  numbers in different countries
+const numb = 388789.23;
+console.log('US:', new Intl.NumberFormat('en-US').format(numb)); //US: 388,789.23
+console.log('UK:', new Intl.NumberFormat('en-UK').format(numb)); //UK: 388,789.23
+console.log('Syria:', new Intl.NumberFormat('ar-SY').format(numb)); //Syria: ٣٨٨٬٧٨٩٫٢٣
+
+//lets create an object
+//const option = { style: 'unit', unit: 'celsius' }; //you can also do {style:'currencies',currencies:'Euro'}
+const option = {
+  style: 'currency',
+  unit: 'celsius',
+  currency: 'EUR',
+  //useGrouping: false, //if we   assign useGrouping: false,  then the numbers prints with out the seperators  US: €388789.23  UK: €388789.23   Syria: ٣٨٨٧٨٩٫٢٣ €  Germany: 388789,23 € ,en-US €388789.23
+};
+
+console.log('US:', new Intl.NumberFormat('en-US', option).format(numb)); //US: 388,789.23°C      currencies n-US €388,789.23
+console.log('UK:', new Intl.NumberFormat('en-UK', option).format(numb)); //
+console.log('Syria:', new Intl.NumberFormat('ar-SY', option).format(numb)); // if we use currency  ٣٨٨٬٧٨٩٫٢٣ €
+console.log('Germany:', new Intl.NumberFormat('de-DE', option).format(numb)); //Germany:88.789,23 °C    if we use currencies   388.789,23 €
+
+//if we want the type of the number based on the current browser
+console.log(
+  navigator.language,
+  new Intl.NumberFormat(navigator.language, option).format(numb)
+); //en-US €388,789.23    becouse am in the use this result shown en-US
