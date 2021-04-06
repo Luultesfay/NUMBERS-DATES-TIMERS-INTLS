@@ -30,7 +30,7 @@ const account1 = {
 };
 
 const account2 = {
-  owner: 'Jessica Davis',
+  owner: 'LuuL Tesfay',
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
@@ -141,12 +141,17 @@ const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = `${incomes.toFixed(2)}€`;
+  labelSumIn.textContent = forrmatedCur(incomes, acc.locale, acc.currency); //`${incomes.toFixed(2)}€`;
 
   const out = acc.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumOut.textContent = `${Math.abs(out.toFixed(2))}€`; //tofixed(2 ) fix the unnessesary numbers after the decimal point
+  labelSumOut.textContent = forrmatedCur(
+    Math.abs(out),
+    acc.locale,
+    acc.currency
+  ); // this is new code replces the commented out code
+  //`${Math.abs(out.toFixed(2))}€`; //tofixed(2 ) fix the unnessesary numbers after the decimal point
 
   const interest = acc.movements
     .filter(mov => mov > 0)
@@ -156,7 +161,12 @@ const calcDisplaySummary = function (acc) {
       return int >= 1;
     })
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${interest.toFixed(2)}€`;
+  labelSumInterest.textContent = forrmatedCur(
+    Math.abs(interest),
+    acc.locale,
+    acc.currency
+  ); //new code
+  //`${interest.toFixed(2)}€`;// old code
 };
 
 const createUsernames = function (accs) {
@@ -257,13 +267,17 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value); //this rounds the floor to the the lowest intger
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
-    // add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+    //timer for loan is added
+    setTimeout(function () {
+      ///this will give us loan after 3 second  or it means after the 3 seconds expaired
+      // Add movement
+      currentAccount.movements.push(amount);
+      // add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 3000);
   }
   inputLoanAmount.value = '';
 });
@@ -542,3 +556,56 @@ console.log(
   navigator.language,
   new Intl.NumberFormat(navigator.language, option).format(numb)
 ); //en-US €388,789.23    becouse am in the use this result shown en-US
+
+////////////////////Timers
+////setTimeout allows us to run a function only once after the interval of time.
+//The setTimeout() is a method of the window object. The setTimeout()  sets a timer and executes a callback function after the timer expires.
+
+//The following illustrates the syntax of setTimeout():
+
+//let timeoutID  = setTimeout(cb [,delay], arg1, arg2,...);
+
+/*
+-cb is a callback function to be executed after the timer expires.
+-delay is the time in milliseconds that the timer should wait before executing the callback function. If you omit it, the delay defaults to 0.
+-arg1, arg2, … are arguments passed to the cb callback function.
+*/
+
+//eg
+//note here we use arrow function
+setTimeout(() => console.log('your pizza is ready'), 3000); //your pizza is ready      it output after 3 seconds
+//we can pass arguments like this
+
+setTimeout(
+  (arg1, arg2, arg3) =>
+    console.log(`your pizza is ready with ${arg1}, ${arg2}, and  ${arg3}`),
+  3000,
+  'oliveOile',
+  'meat',
+  'spenach'
+); //your pizza is ready with oliveOile, meat, and  spenach        here we passed arguments of three ingredient and prints after the time is expaired in 3 second
+
+////clearTimeout() The clearTimeout() method of the WindowOrWorkerGlobalScope mixin cancels a timeout previously established by calling setTimeout()
+
+const ingredients = ['meat', 'oliveOile', 'spinach']; //array of ingradient
+const pizzaTimeOut = setTimeout(
+  (arg1, arg2, arg3) =>
+    console.log(`your pizza is ready with ${arg1}, ${arg2}, and  ${arg3}`),
+  3000,
+  ...ingredients //we use spread to unpack the ingredient array here
+); //your pizza is ready with oliveOile, meat, and  spenach
+
+if (ingredients.includes('spinach')) clearTimeout(pizzaTimeOut); //there   the pizza order is  not runing  it cleared out b/c spinach is included
+
+//note that : the  clear time out method  cancels the pizza order  that set by the setTimeOut method   if   it includes ingradient  spinach  but if not it dosent cancel
+
+/////////  setInterval
+//setInterval allows us to run a function repeatedly, starting after the interval of time, then repeating continuously at that interval.
+
+//eg
+/*
+setInterval(() => {
+  const now = new Date();
+  console.log(now);
+}, 1000);//this display the date once every secound
+*/
