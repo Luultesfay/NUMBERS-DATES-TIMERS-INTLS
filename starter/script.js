@@ -190,10 +190,30 @@ const updateUI = function (acc) {
   // Display summary
   calcDisplaySummary(acc);
 };
+////////lets add setInterval timer to the bank list  if we dont use the bank list then when time reach 0  it logged out
+const startLogOutTimer = function () {
+  let time = 120; //100 secound
+  const timer = setInterval(function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0); //we omiit the decimal parts using Math.trunc and then we added also the  start pod to make it double digit
+    const sec = String(Math.trunc(time % 60)).padStart(2, 0);
+    //in each call print the remaining time to UI
+    labelTimer.textContent = `${min}:${sec}`;
+
+    if (time === 0) {
+      clearInterval(timer);
+
+      labelWelcome.textContent = 'Log in To Get Started';
+      containerApp.style.opacity = 0;
+    }
+    time--; //every time it decrese by 1 second
+    //when 0 seconds stop timer and log out user
+  }, 1000);
+  return timer;
+};
 
 ///////////////////////////////////////
 // Event handlers
-let currentAccount;
+let currentAccount, timer; //this   variables is golobal variable becouse we use them in all the  acounts
 
 //fake account login
 //currentAccount = account1;
@@ -229,6 +249,10 @@ btnLogin.addEventListener('click', function (e) {
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
 
+    //we call the timer to log off  and also clear the current account when we open another  account
+    if (timer) clearInterval(timer); //this line of code clears or ends the current account timer  and when we log to the new account we start over with new timer
+    timer = startLogOutTimer();
+
     // Update UI
     updateUI(currentAccount);
   }
@@ -258,6 +282,10 @@ btnTransfer.addEventListener('click', function (e) {
 
     // Update UI
     updateUI(currentAccount);
+
+    //reset timer while the person doing his transfer its not logout him instead it resets the timer and gives him extra time  for his activity to be done
+    clearInterval(timer);
+    timer = startLogOutTimer();
   }
 });
 
@@ -277,6 +305,9 @@ btnLoan.addEventListener('click', function (e) {
 
       // Update UI
       updateUI(currentAccount);
+      //reset timer while the person doing his transfer its not logout him instead it resets the timer and gives him extra time  for his activity to be done
+      clearInterval(timer);
+      timer = startLogOutTimer();
     }, 3000);
   }
   inputLoanAmount.value = '';
@@ -609,3 +640,5 @@ setInterval(() => {
   console.log(now);
 }, 1000);//this display the date once every secound
 */
+
+////////lets add setinterval timer to the bank list  if we dont use the bank list then when time reach 0  it logged out
