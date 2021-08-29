@@ -508,7 +508,7 @@ console.log(10 / 3); //3.3333333333333335
 // Creating Dates
 
 const now = new Date(); //gives us current time
-console.log(now);
+console.log(now); //
 
 console.log(new Date('Aug 02 2020 18:05:41')); //Sun Aug 02 2020 18:05:41 GMT-0700 (Pacific Daylight Time)
 console.log(new Date('December 24, 2015')); //Thu Dec 24 2015 00:00:00 GMT-0800 (Pacific Standard Time)
@@ -573,7 +573,7 @@ console.log('Syria:', new Intl.NumberFormat('ar-SY').format(numb)); //Syria: ٣�
 const option = {
   style: 'currency',
   unit: 'celsius',
-  currency: 'EUR',
+  currency: 'USD',
   //useGrouping: false, //if we   assign useGrouping: false,  then the numbers prints with out the seperators  US: €388789.23  UK: €388789.23   Syria: ٣٨٨٧٨٩٫٢٣ €  Germany: 388789,23 € ,en-US €388789.23
 };
 
@@ -596,7 +596,18 @@ console.log(
 
 //let timeoutID  = setTimeout(cb [,delay], arg1, arg2,...);
 
+let getFood = setTimeout(
+  function (a, b) {
+    console.log(`wow ${a} and ${b} nice food`); //
+  },
+  3000,
+  'cake',
+  'beer'
+);
+
 /*
+
+
 -cb is a callback function to be executed after the timer expires.
 -delay is the time in milliseconds that the timer should wait before executing the callback function. If you omit it, the delay defaults to 0.
 -arg1, arg2, … are arguments passed to the cb callback function.
@@ -642,3 +653,8 @@ setInterval(() => {
 */
 
 ////////lets add setinterval timer to the bank list  if we dont use the bank list then when time reach 0  it logged out
+/*
+const outPutInterval = setInterval(() => {
+  console.log(` i am happy becouse  god with me  🙏`);
+}, 3000);
+*/
